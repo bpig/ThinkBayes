@@ -12,7 +12,6 @@ class Cookie(Pmf):
     
     def __init__(self, hypos):
         """Initialize self.
-
         hypos: sequence of string bowl IDs
         """
         Pmf.__init__(self)
@@ -22,7 +21,6 @@ class Cookie(Pmf):
     
     def Update(self, data):
         """Updates the PMF with new data.
-
         data: string cookie type
         """
         for hypo in self.Values():
@@ -37,7 +35,6 @@ class Cookie(Pmf):
     
     def Likelihood(self, data, hypo):
         """The likelihood of the data under the hypothesis.
-
         data: string cookie type
         hypo: string bowl ID
         """
@@ -49,7 +46,6 @@ def main():
     hypos = ['Bowl 1', 'Bowl 2']
     
     pmf = Cookie(hypos)
-    
     pmf.Update('vanilla')
     
     for hypo, prob in pmf.Items():

@@ -8,7 +8,6 @@ License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 from dice import Dice
 import thinkplot
 
-
 class Train(Dice):
     """Represents hypotheses about how many trains the company has.
 
@@ -16,11 +15,10 @@ class Train(Dice):
     for the Dice problem.
     """
 
-
 def main():
     hypos = xrange(1, 1001)
     suite = Train(hypos)
-
+    
     suite.Update(60)
     print suite.Mean()
 
@@ -29,8 +27,7 @@ def main():
     thinkplot.Save(root='train1',
                    xlabel='Number of trains',
                    ylabel='Probability',
-                   formats=['pdf', 'eps'])
-
+                   formats=['pdf'])
 
 if __name__ == '__main__':
     main()

@@ -31,7 +31,8 @@ class Monty(Pmf):
             self.Mult(hypo, like)
         self.Normalize()
 
-    def Likelihood(self, data, hypo):
+    @staticmethod
+    def Likelihood(data, hypo):
         """Compute the likelihood of the data under the hypothesis.
 
         hypo: string name of the door where the prize is

@@ -25,10 +25,9 @@ rather than fair?"
 import thinkbayes
 import thinkplot
 
-
 class Euro(thinkbayes.Suite):
     """Represents hypotheses about the probability of heads."""
-
+    
     def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
@@ -39,12 +38,11 @@ class Euro(thinkbayes.Suite):
         if data == 'H':
             return x
         else:
-            return 1-x
-
+            return 1 - x
 
 class Euro2(thinkbayes.Suite):
     """Represents hypotheses about the probability of heads."""
-
+    
     def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
@@ -53,15 +51,13 @@ class Euro2(thinkbayes.Suite):
         """
         x = hypo / 100.0
         heads, tails = data
-        like = x**heads * (1-x)**tails
+        like = x ** heads * (1 - x) ** tails
         return like
-
 
 def UniformPrior():
     """Makes a Suite with a uniform prior."""
     suite = Euro(xrange(0, 101))
     return suite
-
 
 def TrianglePrior():
     """Makes a Suite with a triangular prior."""
@@ -69,10 +65,9 @@ def TrianglePrior():
     for x in range(0, 51):
         suite.Set(x, x)
     for x in range(51, 101):
-        suite.Set(x, 100-x) 
+        suite.Set(x, 100 - x)
     suite.Normalize()
     return suite
-
 
 def RunUpdate(suite, heads=140, tails=110):
     """Updates the Suite with the given number of heads and tails.
@@ -82,25 +77,19 @@ def RunUpdate(suite, heads=140, tails=110):
     tails: int
     """
     dataset = 'H' * heads + 'T' * tails
-
+    
     for data in dataset:
         suite.Update(data)
-
 
 def Summarize(suite):
     """Prints summary statistics for the suite."""
     print suite.Prob(50)
-
     print 'MLE', suite.MaximumLikelihood()
-
     print 'Mean', suite.Mean()
-    print 'Median', thinkbayes.Percentile(suite, 50) 
-
-    print '5th %ile', thinkbayes.Percentile(suite, 5) 
-    print '95th %ile', thinkbayes.Percentile(suite, 95) 
-
+    print 'Median', thinkbayes.Percentile(suite, 50)
+    print '5th %ile', thinkbayes.Percentile(suite, 5)
+    print '95th %ile', thinkbayes.Percentile(suite, 95)
     print 'CI', thinkbayes.CredibleInterval(suite, 90)
-
 
 def PlotSuites(suites, root):
     """Plots two suites.
@@ -111,35 +100,57 @@ def PlotSuites(suites, root):
     thinkplot.Clf()
     thinkplot.PrePlot(len(suites))
     thinkplot.Pmfs(suites)
-
+    
     thinkplot.Save(root=root,
                    xlabel='x',
                    ylabel='Probability',
-                   formats=['pdf', 'eps'])
-
+                   formats=['pdf'])
 
 def main():
     # make the priors
     suite1 = UniformPrior()
     suite1.name = 'uniform'
-
+    
     suite2 = TrianglePrior()
     suite2.name = 'triangle'
-
+    
     # plot the priors
     PlotSuites([suite1, suite2], 'euro2')
-
+    
     # update
     RunUpdate(suite1)
     Summarize(suite1)
-
+    
     RunUpdate(suite2)
     Summarize(suite2)
-
+    
     # plot the posteriors
     PlotSuites([suite1], 'euro1')
     PlotSuites([suite1, suite2], 'euro3')
 
+def lee():
+    class Euro(thinkbayes.Suite):
+        def Likelihood(self, data, hypo):
+            x = hypo
+            if data == 'H':
+                return x / 100.0
+            else:
+                return 1 - x / 100.0
+    
+    suite = Euro(range(101))
+    for x in range(100):
+        suite.Set(x, 100 - x)
+    
+    dataset = 'T' * 110 + 'H' * 140
+    for data in dataset:
+        suite.Update(data)
+    thinkplot.PrePlot(1)
+    thinkplot.Pmf(suite)
+    thinkplot.Save(root='lee',
+                   xlabel='lee pmf',
+                   ylabel='prob')
+    suite.Print()
 
 if __name__ == '__main__':
-    main()
+    # main()
+    lee()

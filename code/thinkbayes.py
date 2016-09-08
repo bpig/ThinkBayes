@@ -334,7 +334,6 @@ class Hist(_DictWrapper):
 
         Args:
             x: number value
-
         Returns:
             int frequency
         """
@@ -711,7 +710,6 @@ def MakePmfFromList(t, name=''):
     Args:
         t: sequence of numbers
         name: string name for this PMF
-
     Returns:
         Pmf object
     """
@@ -818,7 +816,7 @@ def MakeUniformPmf(low, high, n):
     pmf.Normalize()
     return pmf
 
-class Cdf(object):
+class Cdf:
     """Represents a cumulative distribution function.
 
     Attributes:
@@ -834,7 +832,6 @@ class Cdf(object):
     
     def Copy(self, name=None):
         """Returns a copy of this Cdf.
-
         Args:
             name: string name for the new Cdf
         """
@@ -895,7 +892,8 @@ class Cdf(object):
         Returns:
             float probability
         """
-        if x < self.xs[0]: return 0.0
+        if x < self.xs[0]:
+            return 0.0
         index = bisect.bisect(self.xs, x)
         p = self.ps[index - 1]
         return p
@@ -912,8 +910,10 @@ class Cdf(object):
         if p < 0 or p > 1:
             raise ValueError('Probability p must be in range [0, 1]')
         
-        if p == 0: return self.xs[0]
-        if p == 1: return self.xs[-1]
+        if p == 0:
+            return self.xs[0]
+        if p == 1:
+            return self.xs[-1]
         index = bisect.bisect(self.ps, p)
         if p == self.ps[index - 1]:
             return self.xs[index - 1]
@@ -972,7 +972,8 @@ class Cdf(object):
         interval = self.Value(prob), self.Value(1 - prob)
         return interval
     
-    def _Round(self, multiplier=1000.0):
+    @staticmethod
+    def _Round(multiplier=1000.0):
         """
         An entry is added to the cdf only if the percentile differs
         from the previous value in a significant digit, where the number
@@ -1101,7 +1102,6 @@ class Suite(Pmf):
         """Updates each hypothesis based on the data.
 
         data: any representation of the data
-
         returns: the normalizing constant
         """
         for hypo in self.Values():
@@ -1116,7 +1116,6 @@ class Suite(Pmf):
         a copy.
 
         Note: unlike Update, LogUpdate does not normalize.
-
         Args:
             data: any representation of the data
         """
@@ -1134,7 +1133,6 @@ class Suite(Pmf):
         a copy.
 
         dataset: a sequence of data
-
         returns: the normalizing constant
         """
         for data in dataset:
@@ -1150,7 +1148,6 @@ class Suite(Pmf):
         a copy.
 
         dataset: a sequence of data
-
         returns: None
         """
         for data in dataset:
@@ -1422,7 +1419,7 @@ def SampleSum(dists, n):
 
     returns: new Pmf of sums
     """
-    pmf = MakePmfFromList(RandomSum(dists) for i in xrange(n))
+    pmf = MakePmfFromList(RandomSum(dists) for _ in xrange(n))
     return pmf
 
 def EvalGaussianPdf(x, mu, sigma):
