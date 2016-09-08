@@ -12,7 +12,7 @@ import thinkplot
 
 import matplotlib.pyplot as pyplot
 
-FORMATS = ['png']
+FORMATS = ['pdf']
 
 def ReadData(filename='showcases.2011.csv'):
     """Reads a CSV file of data.
